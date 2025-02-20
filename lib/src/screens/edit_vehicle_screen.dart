@@ -146,32 +146,43 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
 
   void _logout() async {
     // Show a confirmation dialog before deleting
-    bool confirmLogout = await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Logout'),
-          content: Text('Are you sure you want to Logout?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed:
-                  () => NavigationService().navigateToUntil(Screenroutes.login),
-              child: Text('Logout', style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        );
-      },
-    );
+    bool confirmLogout =
+        await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Logout'),
+              content: Text('Are you sure you want to Logout?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context, false),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed:
+                      () => NavigationService().navigateToUntil(
+                        Screenroutes.login,
+                      ),
+                  child: Text('Logout', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            );
+          },
+        ) ??
+        false;
 
-    if (confirmLogout == true) {
-      // Show a confirmation message
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('User Logged out successfully!')));
+    if (!confirmLogout) {
+      NavigationService().navigateToUntil(Screenroutes.login);
+
+      // Use a short delay to ensure navigation completes before showing the message
+      Future.delayed(Duration(milliseconds: 500), () {
+        final context = NavigationService().navigatorKey.currentContext;
+        if (context != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User Logged out successfully!')),
+          );
+        }
+      });
     }
   }
 

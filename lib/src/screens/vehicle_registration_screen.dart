@@ -37,23 +37,19 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
     super.initState();
   }
 
-  // Controllers for text fields
-  final _plateNumberController = TextEditingController();
-  final _capacityController = TextEditingController();
-  final _noteController = TextEditingController();
+  // // Controllers for text fields
+  // final _plateNumberController = TextEditingController();
+  // final _capacityController = TextEditingController();
+  // final _noteController = TextEditingController();
 
-  @override
-  void dispose() {
-    // Clean up controllers
-    _plateNumberController.dispose();
-    _capacityController.dispose();
-    _noteController.dispose();
-    super.dispose();
-  }
-
-  // // Dropdown values
-  String? _selectedType;
-  String? _selectedCapacityUnit;
+  // @override
+  // void dispose() {
+  //   // Clean up controllers
+  //   _plateNumberController.dispose();
+  //   _capacityController.dispose();
+  //   _noteController.dispose();
+  //   super.dispose();
+  // }
 
   // Dropdown options
   final List<String> _typeOptions = [
