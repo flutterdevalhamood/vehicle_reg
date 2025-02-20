@@ -156,6 +156,32 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
     // });
   }
 
+  String? _validateForm(VehicleProvider vehicleProvider) {
+    if (vehicleProvider.selectedType == null ||
+        vehicleProvider.selectedType!.isEmpty) {
+      return 'Please select a type';
+    }
+    if (vehicleProvider.plateNumberController.text.isEmpty) {
+      return 'Please enter a plate number';
+    }
+    if (!RegExp(
+      r'^[A-Za-z0-9]+$',
+    ).hasMatch(vehicleProvider.plateNumberController.text)) {
+      return 'Plate number should be alphanumeric';
+    }
+    if (vehicleProvider.capacityController.text.isEmpty) {
+      return 'Please enter a capacity';
+    }
+    if (double.tryParse(vehicleProvider.capacityController.text) == null) {
+      return 'Please enter a valid number for capacity';
+    }
+    if (vehicleProvider.selectedCapacity == null ||
+        vehicleProvider.selectedCapacity!.isEmpty) {
+      return 'Please select a unit';
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final vehicleProvider = Provider.of<VehicleProvider>(context);
@@ -191,6 +217,7 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
                 // Plate Number TextField
                 TextField(
                   controller: vehicleProvider.plateNumberController,
+
                   decoration: InputDecoration(
                     labelText: 'Plate Number',
                     border: OutlineInputBorder(),
@@ -371,13 +398,24 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
               padding: EdgeInsets.all(16.0),
               child: ElevatedButton(
                 onPressed: () async {
-                  await vehicleProvider.saveData();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Vehicle details saved successfully!'),
-                    ),
-                  );
-                  NavigationService().pushNavigation(Screenroutes.homeScreen);
+                  String? validationError = _validateForm(vehicleProvider);
+                  if (validationError != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(validationError),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  } else {
+                    await vehicleProvider.saveData();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Vehicle details saved successfully!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    NavigationService().pushNavigation(Screenroutes.homeScreen);
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
