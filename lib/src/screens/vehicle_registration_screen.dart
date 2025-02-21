@@ -86,7 +86,7 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
       return 'Please enter a plate number';
     }
     if (!RegExp(
-      r'^[A-Za-z0-9]+$',
+      r'^[A-Za-z0-9 ]+$',
     ).hasMatch(vehicleProvider.plateNumberController.text)) {
       return 'Plate number should be alphanumeric';
     }
