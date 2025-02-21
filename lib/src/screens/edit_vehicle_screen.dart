@@ -62,10 +62,6 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
     _selectedType = widget.data['type'];
     _selectedCapacityUnit = widget.data['capacityUnit'];
     _loadImages();
-    // final List<String> imagePaths = List<String>.from(
-    //   widget.data['images'] ?? [],
-    // );
-    // _selectedImages = imagePaths.map((path) => File(path)).toList();
   }
 
   Future<void> _loadImages() async {
@@ -81,15 +77,12 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
         _selectedImages.add(file); // Add the File object
       }
     }
-
     setState(() {});
   }
 
   Future<void> _saveData() async {
     final List<String> imageFileNames =
         _selectedImages.map((file) => file.path.split('/').last).toList();
-    // final List<String> imagePaths =
-    //     _selectedImages.map((file) => file.path).toList();
     final vehicleData = {
       'type': _typeController.text,
       'plateNumber': _plateNumberController.text,
@@ -489,24 +482,4 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
       });
     }
   }
-
-  // Pick image from gallery
-  // Future<void> _pickImageFromGallery() async {
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-  //   if (image != null) {
-  //     setState(() {
-  //       _selectedImages.add(File(image.path));
-  //     });
-  //   }
-  // }
-
-  // Capture image from camera
-  // Future<void> _captureImageFromCamera() async {
-  //   final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-  //   if (image != null) {
-  //     setState(() {
-  //       _selectedImages.add(File(image.path));
-  //     });
-  //   }
-  // }
 }

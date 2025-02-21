@@ -37,20 +37,6 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
     super.initState();
   }
 
-  // // Controllers for text fields
-  // final _plateNumberController = TextEditingController();
-  // final _capacityController = TextEditingController();
-  // final _noteController = TextEditingController();
-
-  // @override
-  // void dispose() {
-  //   // Clean up controllers
-  //   _plateNumberController.dispose();
-  //   _capacityController.dispose();
-  //   _noteController.dispose();
-  //   super.dispose();
-  // }
-
   // Dropdown options
   final List<String> _typeOptions = [
     'Flat trailer',
@@ -62,38 +48,6 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
 
   // Image picker
   final ImagePicker _picker = ImagePicker();
-  final List<File> _selectedImages = [];
-
-  // Save data locally
-  // Future<void> _saveData() async {
-  //   List<String> existingVehicles = prefs?.getStringList('vehicles') ?? [];
-  //   Map<String, dynamic> newVehicle = {
-  //     'type': _selectedType ?? '',
-  //     'plateNumber': _plateNumberController.text,
-  //     'capacity': _capacityController.text,
-  //     'capacityUnit': _selectedCapacityUnit ?? '',
-  //     'note': _noteController.text,
-  //     'images':
-  //         _selectedImages.map((image) => image.path.split('/').last).toList(),
-  //   };
-  //   existingVehicles.add(jsonEncode(newVehicle));
-  //   await prefs?.setStringList('vehicles', existingVehicles);
-  //
-  //   final vehicleProvider = Provider.of<VehicleProvider>(
-  //     context,
-  //     listen: false,
-  //   );
-  //   await vehicleProvider.loadVehicles();
-  //
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     SnackBar(content: Text('Vehicle details saved successfully!')),
-  //   );
-  //   NavigationService().pushNavigation(Screenroutes.homeScreen);
-  // }
-
-  Future<void> _logout() async {
-    NavigationService().navigateToUntil(Screenroutes.login);
-  }
 
   Future<File> _saveImageToAppDirectory(File imageFile) async {
     final appDir = await getApplicationDocumentsDirectory();
@@ -106,10 +60,12 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       final File savedImage = await _saveImageToAppDirectory(File(image.path));
-      Provider.of<VehicleProvider>(context, listen: false).addImage(savedImage);
-      // setState(() {
-      //   _selectedImages.add(savedImage);
-      // });
+      if (mounted) {
+        Provider.of<VehicleProvider>(
+          context,
+          listen: false,
+        ).addImage(savedImage);
+      }
     }
   }
 
@@ -119,37 +75,6 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
       final File savedImage = await _saveImageToAppDirectory(File(image.path));
       Provider.of<VehicleProvider>(context, listen: false).addImage(savedImage);
     }
-  }
-
-  // Add predefined image to selected images
-  void _addPredefinedImage(String imagePath) async {
-    final vehicleProvider = Provider.of<VehicleProvider>(context);
-    try {
-      // Load the image from the asset bundle
-      final byteData = await rootBundle.load(imagePath);
-
-      // Use the app's document directory (persistent storage) instead of temporary directory
-      final appDir = await getApplicationDocumentsDirectory();
-      final fileName = imagePath.split('/').last; // Extract the file name
-      final file = File('${appDir.path}/$fileName');
-
-      // Check if the file already exists to avoid duplicates
-      if (!file.existsSync()) {
-        await file.writeAsBytes(byteData.buffer.asUint8List());
-      }
-
-      Provider.of<VehicleProvider>(context, listen: false).addImage(file);
-    } catch (e) {
-      print('Error adding predefined image: $e');
-    }
-    // final byteData = await rootBundle.load(imagePath);
-    // final tempDir = await getTemporaryDirectory();
-    // final file = File('${tempDir.path}/${imagePath.split('/').last}');
-    // await file.writeAsBytes(byteData.buffer.asUint8List());
-    //
-    // setState(() {
-    //   _selectedImages.add(file);
-    // });
   }
 
   String? _validateForm(VehicleProvider vehicleProvider) {
@@ -176,6 +101,20 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
       return 'Please select a unit';
     }
     return null;
+  }
+
+  void showFullScreenImage(BuildContext context, File imageFile) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: GestureDetector(
+            onTap: NavigationService().popNavigation,
+            child: Image.file(imageFile, fit: BoxFit.cover),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -333,9 +272,17 @@ class _VehicleRegistrationScreenState extends State<VehicleRegistrationScreen> {
                           alignment: Alignment.topRight,
                           children: [
                             // Image
-                            Image.file(
-                              vehicleProvider.selectedImages[index],
-                              fit: BoxFit.cover,
+                            GestureDetector(
+                              onTap: () {
+                                showFullScreenImage(
+                                  context,
+                                  vehicleProvider.selectedImages[index],
+                                );
+                              },
+                              child: Image.file(
+                                vehicleProvider.selectedImages[index],
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             // Close Icon
                             GestureDetector(
