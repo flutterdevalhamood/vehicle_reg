@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/src/models/customer_model.dart';
 import 'package:sample/src/providers/customer_provider.dart';
@@ -29,6 +29,8 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
   String _tradeLicensePath = '';
   String _ownerIdPath = '';
   String _powerOfAttorneyPath = '';
+
+  File? selectedFile;
 
   @override
   void initState() {
@@ -328,6 +330,28 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
     );
   }
 
+  // Future<void> pickFileOrImage() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: [
+  //       'jpg',
+  //       'jpeg',
+  //       'png',
+  //       'pdf',
+  //       'doc',
+  //       'docx',
+  //       'txt',
+  //       'xlsx',
+  //     ],
+  //   );
+  //
+  //   if (result != null) {
+  //     setState(() {
+  //       selectedFile = File(result.files.single.path!);
+  //     });
+  //   }
+  // }
+
   Widget _buildEditableFileUpload(
     BuildContext context,
     String label,
@@ -371,13 +395,36 @@ class _CustomerEditScreenState extends State<CustomerEditScreen> {
                 ],
                 IconButton(
                   onPressed: () async {
-                    final pickedFile = await ImagePicker().pickImage(
-                      source: ImageSource.gallery,
-                    );
-                    if (pickedFile != null) {
-                      setFilePath(pickedFile.path);
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: [
+                            'jpg',
+                            'jpeg',
+                            'png',
+                            'pdf',
+                            'doc',
+                            'docx',
+                            'txt',
+                            'xlsx',
+                          ],
+                        );
+
+                    if (result != null) {
+                      setState(() {
+                        setFilePath(result.files.single.path!);
+                        // selectedFile = File(result.files.single.path!);
+                      });
                     }
                   },
+                  //     () async {
+                  //   final pickedFile = await ImagePicker().pickImage(
+                  //     source: ImageSource.gallery,
+                  //   );
+                  //   if (pickedFile != null) {
+                  //     setFilePath(pickedFile.path);
+                  //   }
+                  // },
                   icon: Icon(Icons.upload, color: Colors.blue.shade900),
                 ),
               ],
