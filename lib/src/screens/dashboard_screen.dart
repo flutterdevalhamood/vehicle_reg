@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sample/src/util/app_navigation.dart';
 import 'package:sample/src/util/app_routes.dart';
-
-import '../../main.dart';
+import 'package:sample/src/widgets/drawer_widget.dart';
 
 class DashBoardScreen extends StatefulWidget {
   const DashBoardScreen({super.key});
@@ -30,39 +29,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       'route': Screenroutes.customerRegistration,
     },
   ];
-  void _logout() async {
-    // Show a confirmation dialog before deleting
-    bool confirmLogout =
-        await showDialog<bool>(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text('Logout'),
-              content: Text('Are you sure you want to Logout?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context, false),
-                  child: Text('Cancel'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.pop(context, true),
-                  child: Text('Logout', style: TextStyle(color: Colors.red)),
-                ),
-              ],
-            );
-          },
-        ) ??
-        false;
-
-    if (confirmLogout) {
-      NavigationService().navigateToUntil(Screenroutes.login);
-      Future.delayed(Duration(milliseconds: 500), () {
-        scaffoldMessengerKey.currentState?.showSnackBar(
-          SnackBar(content: Text('User Logged out successfully!')),
-        );
-      });
-    }
-  }
 
   _getBody(BuildContext context) {
     return Container(
@@ -79,7 +45,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
           crossAxisCount: 2, // Number of columns in the grid
           crossAxisSpacing: 10.0, // Spacing between columns
           mainAxisSpacing: 10.0, // Spacing between rows
-          childAspectRatio: 1.0, // Aspect ratio of the grid items
+          childAspectRatio: 1.8, // Aspect ratio of the grid items
         ),
         itemCount: gridItems.length,
         itemBuilder: (context, index) {
@@ -93,11 +59,11 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(gridItems[index]['icon'], size: 40.0),
-                  SizedBox(height: 10.0),
+                  Icon(gridItems[index]['icon'], size: 35.0),
+                  SizedBox(height: 8.0),
                   Text(
                     gridItems[index]['title'],
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 14.0),
                   ),
                 ],
               ),
@@ -111,13 +77,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Dashboard'),
-        leading: IconButton(
-          onPressed: () => _logout(),
-          icon: Icon(Icons.logout),
-        ),
-      ),
+      drawer: DrawerWidget(),
+      appBar: AppBar(title: Text('Dashboard')),
       body: _getBody(context),
     );
   }

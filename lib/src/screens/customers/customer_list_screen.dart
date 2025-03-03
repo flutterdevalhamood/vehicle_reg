@@ -6,7 +6,6 @@ import 'package:sample/src/providers/customer_provider.dart';
 import 'package:sample/src/util/app_colors.dart';
 import 'package:sample/src/util/app_navigation.dart';
 import 'package:sample/src/util/app_routes.dart';
-// Import the CustomerProvider
 
 class CustomerListScreen extends StatefulWidget {
   const CustomerListScreen({super.key});
@@ -34,6 +33,36 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
     _searchController.dispose();
     _debounceTimer?.cancel();
     super.dispose();
+  }
+
+  void _deleteVehicle(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Vehicle"),
+          content: Text("Are you sure you want to delete this vehicle?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context), // Cancel
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Navigator.pop(context);
+                // final vehicleProvider = Provider.of<CustomerProvider>(
+                //   context,
+                //   listen: false,
+                // );
+                // await CustomerProvider.deleteVehicle(index);
+                // Delete the vehicle
+              },
+              child: Text("Delete", style: TextStyle(color: Colors.red)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Debounce search logic
@@ -124,7 +153,7 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 16,
-                                vertical: 8,
+                                vertical: 4,
                               ),
                               child: Card(
                                 elevation: 4.0,
@@ -155,9 +184,29 @@ class _CustomerListScreenState extends State<CustomerListScreen> {
                                   trailing: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.edit, color: Colors.blue),
+                                      IconButton(
+                                        onPressed: () {
+                                          NavigationService().pushNavigation(
+                                            Screenroutes.customerEdit,
+                                            arguments: customer,
+                                          );
+                                        },
+
+                                        icon: Icon(
+                                          Icons.edit,
+                                          color: Colors.blue,
+                                        ),
+                                      ),
                                       SizedBox(width: 8),
-                                      Icon(Icons.delete, color: Colors.red),
+                                      IconButton(
+                                        onPressed: () async {
+                                          _deleteVehicle(index);
+                                        },
+                                        icon: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),

@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: Padding(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 16,
-                                            vertical: 8,
+                                            vertical: 4,
                                           ),
                                           child: Card(
                                             elevation: 4,

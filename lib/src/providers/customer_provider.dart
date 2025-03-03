@@ -204,4 +204,13 @@ class CustomerProvider with ChangeNotifier {
         }).toList();
     notifyListeners();
   }
+
+  void updateCustomer(Customer oldCustomer, Customer newCustomer) {
+    final index = _customers.indexOf(oldCustomer);
+    if (index != -1) {
+      _customers[index] = newCustomer;
+      _saveCustomers(); // Save the updated list to SharedPreferences
+      notifyListeners();
+    }
+  }
 }

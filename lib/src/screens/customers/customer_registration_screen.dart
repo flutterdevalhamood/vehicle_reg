@@ -827,6 +827,7 @@ class _CustomerRegistrationScreenState
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text('Customer registered successfully!'),
+                          backgroundColor: Colors.green,
                         ),
                       );
 

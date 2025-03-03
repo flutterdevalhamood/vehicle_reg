@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/src/blocs/login_bloc.dart';
+import 'package:sample/src/models/customer_model.dart';
 import 'package:sample/src/providers/vehicle_provider.dart';
 import 'package:sample/src/screens/customers/customer_detail_screen.dart';
+import 'package:sample/src/screens/customers/customer_edit_screen.dart';
 import 'package:sample/src/screens/customers/customer_list_screen.dart';
 import 'package:sample/src/screens/customers/customer_registration_screen.dart';
 import 'package:sample/src/screens/vehicles/vehicle_detail_screen.dart';
@@ -117,13 +119,14 @@ class Screenroutes {
           },
         );
 
-      // case Screenroutes.customerEdit:
-      //   return MaterialPageRoute(
-      //     settings: const RouteSettings(name: Screenroutes.customerEdit),
-      //     builder: (BuildContext context) {
-      //       return CustomerDetailScreen();
-      //     },
-      //   );
+      case Screenroutes.customerEdit:
+        final customer = settings.arguments as Customer;
+        return MaterialPageRoute(
+          settings: const RouteSettings(name: Screenroutes.customerEdit),
+          builder: (BuildContext context) {
+            return CustomerEditScreen(customer: customer);
+          },
+        );
     }
     return null;
   }
