@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:sample/src/base/base_page.dart';
-import 'package:sample/src/util/app_enums.dart';
+import 'package:sample/src/util/app_navigation.dart';
 import 'package:sample/src/util/app_sizes.dart';
 import 'package:sample/src/util/shared_pref.dart';
 
@@ -69,6 +69,27 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
     // setState(() {});
   }
 
+  void showFullScreenImage(BuildContext context, File imageFile) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: GestureDetector(
+              onTap: NavigationService().popNavigation,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.file(imageFile, fit: BoxFit.cover),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Future<Map<String, dynamic>> _getSavedData() async {
     return {
       'type': prefs?.getString('type') ?? 'N/A',
@@ -88,13 +109,14 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final vehicle = widget.vehicle;
-    return BasePage(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Vehicle Details'),
+        backgroundColor:
+            Theme.of(context).appBarTheme.backgroundColor, // Use global theme
+        iconTheme: Theme.of(context).appBarTheme.iconTheme, // Use global theme
+      ),
       body: _getBody(context, vehicle),
-      padding: EdgeInsets.only(left: 0, right: 0, top: 0),
-      menuRequired: false,
-      appBarType: AppBarType.backWithTitle,
-      title: 'Vehicle Details',
-      preferredHeight: AppWidgetSizes.dimen_60,
     );
   }
 
@@ -114,11 +136,12 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Colors.blue.shade100, Colors.purple.shade100],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.blue.shade50, Colors.white],
             ),
           ),
+
           child: Column(
             children: [
               SingleChildScrollView(
@@ -160,10 +183,8 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                     if (vehicle['images'].isNotEmpty)
                       Text(
                         'Images',
-                        style: TextStyle(
-                          fontSize: 22,
+                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
                         ),
                       ),
                     SizedBox(height: 10),
@@ -209,10 +230,21 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: Image.file(
-                                        File('${appDir.path}/$imagePath'),
-                                        width: 150,
-                                        fit: BoxFit.cover,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          File imageFile = File(
+                                            '${appDir.path}/$imagePath',
+                                          );
+                                          showFullScreenImage(
+                                            context,
+                                            imageFile,
+                                          );
+                                        },
+                                        child: Image.file(
+                                          File('${appDir.path}/$imagePath'),
+                                          width: 150,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
                                   );
@@ -225,7 +257,7 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                   ],
                 ),
               ),
-              _buildEditButton(context),
+              // _buildEditButton(context),
             ],
           ),
         );
@@ -295,19 +327,17 @@ class _VehicleDetailScreenState extends State<VehicleDetailScreen> {
                 children: [
                   Text(
                     label ?? '',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
                       color: Colors.grey[600],
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(height: 8),
                   Text(
                     value ?? '',
-                    style: TextStyle(
-                      fontSize: 18,
+                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontSize: AppWidgetSizes.fontSize18,
                       fontWeight: FontWeight.bold,
-                      color: Colors.black87,
                     ),
                   ),
                 ],

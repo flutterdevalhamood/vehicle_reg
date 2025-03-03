@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
               text: "Sign in",
               buttonState: ElevatedButtonState.active,
               onPressed: () {
-                NavigationService().pushNavigation(Screenroutes.homeScreen);
+                NavigationService().pushNavigation(Screenroutes.dashboard);
                 // context.read<LoginBloc>().add(GetSecretKey(
                 //     userId: userIdTextField.text, pwd: pwdTextField.text));
               },

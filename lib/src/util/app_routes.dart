@@ -3,13 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/src/blocs/login_bloc.dart';
 import 'package:sample/src/providers/vehicle_provider.dart';
-import 'package:sample/src/screens/home_screen.dart';
-import 'package:sample/src/screens/vehicle_detail_screen.dart';
-import 'package:sample/src/screens/vehicle_registration_screen.dart';
+import 'package:sample/src/screens/customers/customer_detail_screen.dart';
+import 'package:sample/src/screens/customers/customer_list_screen.dart';
+import 'package:sample/src/screens/customers/customer_registration_screen.dart';
+import 'package:sample/src/screens/vehicles/vehicle_detail_screen.dart';
+import 'package:sample/src/screens/vehicles/vehicle_list_screen.dart';
+import 'package:sample/src/screens/vehicles/vehicle_registration_screen.dart';
 
 import '../constants/string_constants.dart';
-import '../screens/edit_vehicle_screen.dart';
+import '../screens/dashboard_screen.dart';
 import '../screens/login_screen.dart';
+import '../screens/vehicles/edit_vehicle_screen.dart';
 
 class Screenroutes {
   static final RouteObserver<PageRoute> routeobserver =
@@ -20,6 +24,11 @@ class Screenroutes {
   static const String vehicleDetail = "vehicleDetail";
   static const String homeScreen = "HomeScreen";
   static const String editDetail = "EditDetail";
+  static const String dashboard = "DashBoard";
+  static const String customerRegistration = "CustomerRegistration";
+  static const String customerList = "CustomerList";
+  static const String customerDetail = "customerDetail";
+  static const String customerEdit = "customerEdit";
   static Route<dynamic>? routes(RouteSettings settings) {
     StringConstants.currentRoute = settings.name ?? "";
 
@@ -71,6 +80,50 @@ class Screenroutes {
             );
           },
         );
+
+      case Screenroutes.dashboard:
+        return MaterialPageRoute(
+          settings: const RouteSettings(name: Screenroutes.dashboard),
+          builder: (BuildContext context) {
+            return DashBoardScreen();
+          },
+        );
+
+      case Screenroutes.customerRegistration:
+        return MaterialPageRoute(
+          settings: const RouteSettings(
+            name: Screenroutes.customerRegistration,
+          ),
+          builder: (BuildContext context) {
+            return CustomerRegistrationScreen();
+          },
+        );
+
+      case Screenroutes.customerList:
+        return MaterialPageRoute(
+          settings: const RouteSettings(name: Screenroutes.customerList),
+          builder: (BuildContext context) {
+            return CustomerListScreen();
+          },
+        );
+
+      case Screenroutes.customerDetail:
+        final index = settings.arguments as int;
+        // final data = settings.arguments as Map<String, dynamic>?;
+        return MaterialPageRoute(
+          settings: const RouteSettings(name: Screenroutes.customerDetail),
+          builder: (BuildContext context) {
+            return CustomerDetailScreen(customerIndex: index);
+          },
+        );
+
+      // case Screenroutes.customerEdit:
+      //   return MaterialPageRoute(
+      //     settings: const RouteSettings(name: Screenroutes.customerEdit),
+      //     builder: (BuildContext context) {
+      //       return CustomerDetailScreen();
+      //     },
+      //   );
     }
     return null;
   }

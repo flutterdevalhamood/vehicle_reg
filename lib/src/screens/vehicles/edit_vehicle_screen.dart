@@ -5,8 +5,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sample/src/providers/vehicle_provider.dart';
+import 'package:sample/src/util/app_colors.dart';
 import 'package:sample/src/util/app_navigation.dart';
 import 'package:sample/src/util/app_routes.dart';
+import 'package:sample/src/util/app_sizes.dart';
 import 'package:sample/src/util/shared_pref.dart';
 
 class EditVehicleScreen extends StatefulWidget {
@@ -114,10 +116,10 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
               onPressed: () => Navigator.pop(context, false),
               child: Text('Cancel'),
             ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: Text('Delete', style: TextStyle(color: Colors.red)),
-            ),
+            // TextButton(
+            //   onPressed: () => Navigator.pop(context, true),
+            //   child: Text('Delete', style: TextStyle(color: Colors.red)),
+            // ),
           ],
         );
       },
@@ -357,13 +359,29 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
                   children: [
                     ElevatedButton.icon(
                       onPressed: _pickImageFromGallery,
-                      icon: Icon(Icons.photo_library),
-                      label: Text('Gallery'),
+                      icon: Icon(
+                        Icons.photo_library,
+                        color: Appcolors.textWhiteColor(context),
+                      ),
+                      label: Text(
+                        'Gallery',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Appcolors.textWhiteColor(context),
+                        ),
+                      ),
                     ),
                     ElevatedButton.icon(
                       onPressed: _captureImageFromCamera,
-                      icon: Icon(Icons.camera_alt),
-                      label: Text('Camera'),
+                      icon: Icon(
+                        Icons.camera_alt,
+                        color: Appcolors.textWhiteColor(context),
+                      ),
+                      label: Text(
+                        'Camera',
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Appcolors.textWhiteColor(context),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -385,23 +403,23 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          onPressed: _deleteData,
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 50,
-                              vertical: 15,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            minimumSize: Size(double.infinity, 10),
-                          ),
-                          child: Text('Delete', style: TextStyle(fontSize: 18)),
-                        ),
-                      ),
-                      SizedBox(width: 10),
+                      // Expanded(
+                      //   child: ElevatedButton(
+                      //     onPressed: _deleteData,
+                      //     style: ElevatedButton.styleFrom(
+                      //       padding: EdgeInsets.symmetric(
+                      //         horizontal: 50,
+                      //         vertical: 15,
+                      //       ),
+                      //       shape: RoundedRectangleBorder(
+                      //         borderRadius: BorderRadius.circular(10),
+                      //       ),
+                      //       minimumSize: Size(double.infinity, 10),
+                      //     ),
+                      //     child: Text('Delete', style: TextStyle(fontSize: 18)),
+                      //   ),
+                      // ),
+                      // SizedBox(width: 10),
                       Expanded(
                         child: ElevatedButton(
                           onPressed: _saveData,
@@ -415,28 +433,36 @@ class _EditVehicleScreenState extends State<EditVehicleScreen> {
                             ),
                             minimumSize: Size(double.infinity, 10),
                           ),
-                          child: Text('Save', style: TextStyle(fontSize: 18)),
+                          child: Text(
+                            'Save',
+                            style: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium!.copyWith(
+                              color: Appcolors.textWhiteColor(context),
+                              fontSize: AppWidgetSizes.fontSize18,
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),
                     ],
                   ),
                   SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: _logout,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // Red color for logout
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      minimumSize: Size(double.infinity, 10),
-                    ),
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: _logout,
+                  //   style: ElevatedButton.styleFrom(
+                  //     backgroundColor: Colors.red, // Red color for logout
+                  //     padding: EdgeInsets.symmetric(vertical: 15),
+                  //     shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     minimumSize: Size(double.infinity, 10),
+                  //   ),
+                  //   child: Text(
+                  //     'Logout',
+                  //     style: TextStyle(fontSize: 18, color: Colors.white),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

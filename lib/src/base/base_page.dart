@@ -236,10 +236,9 @@ class BasePage extends StatelessWidget {
       leading: _getBackButton(context),
       title: Text(
         title ?? "",
-        style: TextStyle(
-          fontSize: 28,
+        style: Theme.of(context).textTheme.displayLarge!.copyWith(
+          fontSize: AppWidgetSizes.fontSize28,
           fontWeight: FontWeight.bold,
-          color: Colors.black87,
         ),
       ),
       actions: actions,
@@ -249,7 +248,7 @@ class BasePage extends StatelessWidget {
   _getBackButton(BuildContext context) {
     // return IconButton(
     //   onPressed: () async {
-
+    //
     //   },
     //   icon:SvgPicture.asset(
     //     ImageConstants.back(context),
